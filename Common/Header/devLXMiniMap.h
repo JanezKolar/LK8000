@@ -19,7 +19,10 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// General LX device (parsing LXWPn sentences).
 ///
-
+double StaticPressureToQNEAltitude(double ps);
+double QNHAltitudeToQNEAltitude(double QNAAlt);
+double QNEAltitudeToStaticPressure(double alt);
+double CalculateQNH(double alt_qne, double alt_qnh);
 
 class DevLXMiniMap : public DevBase
 {

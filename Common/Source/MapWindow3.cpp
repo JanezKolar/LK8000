@@ -293,6 +293,14 @@ ConfIP[LKMODE_NAV][1],ConfIP32);
 		}
 		// }
 #endif
+		  if(GlobalModelType=MODELTYPE_PNA_MINIMAP)
+		  {
+			SetModeType(LKMODE_MAP,MP_MOVING);
+			LKevent=LKEVENT_NONE;
+			break;
+		  }
+
+
 		DrawWelcome8000(hdc, rc);
 		break;
 	case MSM_LANDABLE:
