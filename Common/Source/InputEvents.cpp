@@ -2851,15 +2851,59 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 {
 	  if (_tcscmp(misc, TEXT("DOWN")) == 0)
 	  {
-		 NextModeIndex();
-		 MapWindow::RefreshMap();
-		 SoundModeIndex();
+		  if(MenuTimeOut == 0)
+		  {
+			  switch (SelectedButtonIndex)
+			                {
+			                    case 1:
+			                    case 2:
+			                    case 3: SelectedButtonIndex++; break;
+			                    case 4: SelectedButtonIndex = 9; break;
+			                    case 5: SelectedButtonIndex = 1; break;
+			                    case 6:
+			                    case 7:
+			                    case 8:
+			                    case 9: SelectedButtonIndex--; break;
+			                    default:
+			                    	SelectedButtonIndex = 5;
+			                        break;
+			                }
+
+		  }
+		  else
+		  {
+			  NextModeIndex();
+			  MapWindow::RefreshMap();
+			  SoundModeIndex();
+		  }
 	  }
 	  else if(_tcscmp(misc, TEXT("UP")) == 0)
 	  {
-		  PreviousModeIndex();
-		  MapWindow::RefreshMap();
-		  SoundModeIndex();
+		  if(MenuTimeOut == 0)
+		   {
+			  switch (SelectedButtonIndex)
+			  {
+			                    case 1: SelectedButtonIndex = 5; break;
+			                    case 2:
+			                    case 3:
+			                    case 4: SelectedButtonIndex--; break;
+			                    case 5:
+			                    case 6:
+			                    case 7:
+			                    case 8: SelectedButtonIndex++; break;
+			                    case 9: SelectedButtonIndex = 4; break;
+			                    default:
+			                    	SelectedButtonIndex = 1;
+			                        break;
+			  }
+
+		   }
+		   else
+		  {
+		  			  PreviousModeIndex();
+		  			  MapWindow::RefreshMap();
+		  			  SoundModeIndex();
+		  }
 
 	  }
 	  else if(_tcscmp(misc, TEXT("LEFT")) == 0)
@@ -2894,6 +2938,8 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	   }
 	  else if(_tcscmp(misc, TEXT("RETURN")) == 0)
 	   {
+		  if(MenuTimeOut == 0) //menu is shown
+		  	  processButton(SelectedButtonIndex);
 
 	   }
 
