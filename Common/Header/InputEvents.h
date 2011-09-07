@@ -107,6 +107,7 @@ class InputEvents {
   static void eventChangeGS(const TCHAR *misc);
   static void eventChangeTurn(const TCHAR *misc);
   static void eventService(const TCHAR *misc);
+  static void eventMinimapKey(const TCHAR *misc)
   // -------
 
   static void showErrors();

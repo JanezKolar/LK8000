@@ -1,0 +1,36 @@
+#Added by Janez Kolar
+#Overriding default keys for LK8000
+
+
+mode=default
+type=key
+data=LEFT
+event=MinimapKey LEFT
+
+mode=default
+type=key
+data=RIGHT
+event=MinimapKey RIGHT
+
+mode=default
+type=key
+data=UP
+event=MinimapKey UP
+
+mode=default
+type=key
+data=DOWN
+event=MinimapKey DOWN
+
+mode=default
+type=key
+data=RETURN
+event=MinimapKey RETURN
+
+mode=default
+type=key
+data=L
+event=Mode Nav1
+label= 
+location=1
+

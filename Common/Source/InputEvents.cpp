@@ -2843,3 +2843,221 @@ void InputEvents::eventOrientation(const TCHAR *misc){
 }
 
 
+void InputEvents::eventMinimapKey(const TCHAR *misc)
+{
+	  if (_tcscmp(misc, TEXT("DOWN")) == 0)
+	  {
+		 NextModeIndex();
+		 MapWindow::RefreshMap();
+		 SoundModeIndex();
+	  }
+	  else if(_tcscmp(misc, TEXT("UP")) == 0)
+	  {
+		  PreviousModeIndex();
+		  MapWindow::RefreshMap();
+		  SoundModeIndex();
+
+	  }
+	  else if(_tcscmp(misc, TEXT("LEFT")) == 0)
+	  {
+		  if(ModeIndex == 0) //tukaj preverjam kateri mode je	in ce je pravi potem menjavam poglede
+		  		{
+
+		  	if ((BottomMode-1) == BM_TRM) {
+		  #ifndef MAP_ZOOM
+		  					if (DisplayMode != dmCircling) BottomMode=BM_LAST;
+		  #else
+		  					if (!MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) BottomMode=BM_LAST;
+		  #endif
+		  					else {
+		  						BottomMode=BM_TRM;
+
+		  //						BottomSounds();
+		  						MapWindow::RefreshMap();
+
+		  					}
+		  				}
+		  				else if ((BottomMode-1)<0) {
+		  					BottomMode=BM_LAST;
+		  #ifndef MAP_ZOOM
+		  				} else if ( ((BottomMode-1)==BM_FIRST)&& (DisplayMode!=dmCircling)) {
+		  #else
+		  				} else if ( ((BottomMode-1)==BM_FIRST)&& !MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) {
+		  #endif
+
+		  					BottomMode--;
+		  	//				BottomSounds();
+		  					MapWindow::RefreshMap();
+
+		  				} else BottomMode--;
+		  		//		BottomSounds(); // 100402
+
+		  				MapWindow::RefreshMap();
+		  				PlayResource(TEXT("IDR_WAV_BTONE2"));
+		  		}
+
+		  	else
+		  	{
+		  		ProcessVirtualKey(100, 100,0 , LKGESTURE_LEFT);
+		  	}
+	   }
+	  else if(_tcscmp(misc, TEXT("RIGHT")) == 0)
+	   {
+		  if(ModeIndex == 0) //tukaj preverjam kateri mode je	in ce je pravi potem menjavam poglede
+		  	{
+		  		if (  (BottomMode+1) >BM_LAST ) {
+		  	#ifndef MAP_ZOOM
+		  						if ( DisplayMode == dmCircling)
+		  	#else
+		  						if ( MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING))
+		  	#endif
+		  							BottomMode=BM_TRM;
+		  						else
+		  							BottomMode=BM_FIRST;
+		  						//BottomSounds();
+
+
+		  					} else ++BottomMode;
+
+		  		MapWindow::RefreshMap();
+		  		PlayResource(TEXT("IDR_WAV_BTONE2"));
+		  	}
+		  	else
+		  	{
+		  	ProcessVirtualKey(100, 100,0 , LKGESTURE_RIGHT);
+		  	}
+	   }
+	  else if(_tcscmp(misc, TEXT("RETURN")) == 0)
+	   {
+
+	   }
+
+}
+
+
+/*
+
+
+void InputEvents::eventMinimap_KeyUp(const TCHAR *misc)
+{
+
+	  PreviousModeIndex();
+	  MapWindow::RefreshMap();
+	  SoundModeIndex();
+
+}
+void InputEvents::eventMinimap_KeyLeft(const TCHAR *misc)
+{
+
+	if(ModeIndex == 0) //tukaj preverjam kateri mode je	in ce je pravi potem menjavam poglede
+		{
+
+	if ((BottomMode-1) == BM_TRM) {
+#ifndef MAP_ZOOM
+					if (DisplayMode != dmCircling) BottomMode=BM_LAST;
+#else
+					if (!MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) BottomMode=BM_LAST;
+#endif
+					else {
+						BottomMode=BM_TRM;
+
+//						BottomSounds();
+						MapWindow::RefreshMap();
+
+					}
+				}
+				else if ((BottomMode-1)<0) {
+					BottomMode=BM_LAST;
+#ifndef MAP_ZOOM
+				} else if ( ((BottomMode-1)==BM_FIRST)&& (DisplayMode!=dmCircling)) {
+#else
+				} else if ( ((BottomMode-1)==BM_FIRST)&& !MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) {
+#endif
+
+					BottomMode--;
+	//				BottomSounds();
+					MapWindow::RefreshMap();
+
+				} else BottomMode--;
+		//		BottomSounds(); // 100402
+
+				MapWindow::RefreshMap();
+				PlayResource(TEXT("IDR_WAV_BTONE2"));
+		}
+
+	else
+	{
+		ProcessVirtualKey(100, 100,0 , LKGESTURE_LEFT);
+	}
+
+
+
+}
+
+
+
+
+
+void InputEvents::eventMinimap_KeyRight(const TCHAR *misc)
+{
+
+
+
+}
+void InputEvents::eventMinimap_KeyMenu(const TCHAR *misc)
+{
+
+	  InputEvents::setMode(TEXT("Menu")); // VENTA3
+
+	  MenuTimeOut = 0;
+	  PlayResource(TEXT("IDR_WAV_TONE1"));
+}
+void InputEvents::eventMinimap_KeyBasicMenu(const TCHAR *misc)
+{
+	PlayResource(TEXT("IDR_WAV_TONE1"));
+	InputEvents::eventSetup(_T("Basic"));
+
+}
+
+void InputEvents::eventMinimap_KeySystemMenu(const TCHAR *misc)
+{
+	PlayResource(TEXT("IDR_WAV_TONE1"));
+	InputEvents::eventSetup(_T("System"));
+
+}
+
+ void InputEvents::eventMinimap_TaskEdit(const TCHAR *misc)
+{
+	PlayResource(TEXT("IDR_WAV_TONE1"));
+//	event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
+	//event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+
+	InputEvents::eventMode(_T("default"));
+	InputEvents::eventSetup(_T("Task"));
+
+}
+
+ void InputEvents::eventMinimap_Target(const TCHAR *misc)
+{
+	PlayResource(TEXT("IDR_WAV_TONE1"));
+//	event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
+	//event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+
+
+	InputEvents::eventSetup(_T("Target"));
+
+}
+ void InputEvents::eventMinimap_Analysis(const TCHAR *misc)
+{
+	PlayResource(TEXT("IDR_WAV_TONE1"));
+//	event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
+	//event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+
+	InputEvents::eventMode(_T("default"));
+	InputEvents::eventAnalysis(_T(""));
+
+}
+
+*/
+
+
