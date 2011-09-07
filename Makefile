@@ -287,6 +287,7 @@ DEVS	:=\
 	$(SRC)/devDisabled.cpp \
 	$(SRC)/devBase.cpp \
 	$(SRC)/devLX.cpp \
+	$(SRC)/devLXMiniMap.cpp \
 	$(SRC)/devLXNano.cpp \
 	$(SRC)/devNmeaOut.cpp \
 	$(SRC)/devPosiGraph.cpp \
