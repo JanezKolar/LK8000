@@ -173,11 +173,13 @@ int                                     MenuTimeoutMax = MENUTIMEOUTMAX;
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
 HBRUSH hBrushButton;
+HBRUSH hBrushButtonHasFocus;
 COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
 COLORREF ColorUnselected = RGB_WHITE;
 COLORREF ColorWarning = RGB_RED;
 COLORREF ColorOK = RGB_BLUE;
 COLORREF ColorButton = RGB_BUTTONS;  
+COLORREF ColorButtonHasFocus = RGB_DARKYELLOW2;
 
 // Display Gobals
 #if USEIBOX
@@ -3007,6 +3009,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
   hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
+  hBrushButtonHasFocus = (HBRUSH)CreateSolidBrush(ColorButtonHasFocus);
 
   GetClientRect(hWndMainWindow, &rc);
 
@@ -3303,6 +3306,7 @@ void Shutdown(void) {
   DeleteObject(hBrushSelected);
   DeleteObject(hBrushUnselected);
   DeleteObject(hBrushButton);
+  DeleteObject(hBrushButtonHasFocus);
   
 #if USEIBOX
   DeleteObject(InfoWindowFont);
@@ -3431,6 +3435,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	SetBkColor((HDC)wParam, ColorButton);
         SetTextColor((HDC)wParam, RGB(0x80,0x80,0x80));
 	return (LRESULT)hBrushButton;
+      case 6:
+    // black on dark yellow
+        SetTextColor((HDC)wParam, RGB_BLACK);
+    	SetBkColor((HDC)wParam, ColorButtonHasFocus);
+        return (LRESULT)hBrushButtonHasFocus;
+      case 7:
+  		// grey on dark yellow
+    	SetTextColor((HDC)wParam, RGB(0x80,0x80,0x80));
+   		SetBkColor((HDC)wParam, ColorButtonHasFocus);
+   		return (LRESULT)hBrushButtonHasFocus;
+
 /*
       default: // added 091230
 	SetBkColor((HDC)wParam, ColorButton);

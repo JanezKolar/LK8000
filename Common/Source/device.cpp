@@ -349,7 +349,7 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
   d = devGetDeviceOnPort(portNum);
 
   if(GlobalModelType=MODELTYPE_PNA_MINIMAP)
-	  devOnsysTicker(d);
+	  devOnSysTicker(d);
 
   // if -log something was commanded by line execution, perform specific logging assembly
   if ((d != NULL) && 

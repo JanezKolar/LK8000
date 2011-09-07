@@ -2796,6 +2796,7 @@ void WndButton::Paint(HDC hDC){
 
   // JMW todo: add icons?
 
+  if(GlobalModelType!=MODELTYPE_PNA_MINIMAP  || (GlobalModelType==MODELTYPE_PNA_MINIMAP && !HasFocus()))
   if (mDown){
     DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
   }else{

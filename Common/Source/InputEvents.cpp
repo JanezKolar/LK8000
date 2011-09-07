@@ -91,6 +91,7 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 // -----------------------------------------------------------------------
 
 bool InitONCE = false;
+int SelectedButtonIndex=0;
 
 // Mapping text names of events to the real thing
 typedef struct {
@@ -2841,7 +2842,10 @@ void InputEvents::eventOrientation(const TCHAR *misc){
   }
   MapWindow::SetAutoOrientation(true); // 101008 reset it
 }
-
+int InputEvents::getSelectedButtonIndex()
+{
+	return SelectedButtonIndex;
+}
 
 void InputEvents::eventMinimapKey(const TCHAR *misc)
 {
@@ -2861,41 +2865,13 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	  else if(_tcscmp(misc, TEXT("LEFT")) == 0)
 	  {
 		  if(ModeIndex == 0) //tukaj preverjam kateri mode je	in ce je pravi potem menjavam poglede
-		  		{
+		  	{
 
-		  	if ((BottomMode-1) == BM_TRM) {
-		  #ifndef MAP_ZOOM
-		  					if (DisplayMode != dmCircling) BottomMode=BM_LAST;
-		  #else
-		  					if (!MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) BottomMode=BM_LAST;
-		  #endif
-		  					else {
-		  						BottomMode=BM_TRM;
+			  	BottomBarChange(false);
+			  	MapWindow::RefreshMap();
+			  	PlayResource(TEXT("IDR_WAV_BTONE2"));
 
-		  //						BottomSounds();
-		  						MapWindow::RefreshMap();
-
-		  					}
-		  				}
-		  				else if ((BottomMode-1)<0) {
-		  					BottomMode=BM_LAST;
-		  #ifndef MAP_ZOOM
-		  				} else if ( ((BottomMode-1)==BM_FIRST)&& (DisplayMode!=dmCircling)) {
-		  #else
-		  				} else if ( ((BottomMode-1)==BM_FIRST)&& !MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING)) {
-		  #endif
-
-		  					BottomMode--;
-		  	//				BottomSounds();
-		  					MapWindow::RefreshMap();
-
-		  				} else BottomMode--;
-		  		//		BottomSounds(); // 100402
-
-		  				MapWindow::RefreshMap();
-		  				PlayResource(TEXT("IDR_WAV_BTONE2"));
-		  		}
-
+		  	}
 		  	else
 		  	{
 		  		ProcessVirtualKey(100, 100,0 , LKGESTURE_LEFT);
@@ -2903,22 +2879,11 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	   }
 	  else if(_tcscmp(misc, TEXT("RIGHT")) == 0)
 	   {
+
+
 		  if(ModeIndex == 0) //tukaj preverjam kateri mode je	in ce je pravi potem menjavam poglede
 		  	{
-		  		if (  (BottomMode+1) >BM_LAST ) {
-		  	#ifndef MAP_ZOOM
-		  						if ( DisplayMode == dmCircling)
-		  	#else
-		  						if ( MapWindow::mode.Is(MapWindow::Mode::MODE_CIRCLING))
-		  	#endif
-		  							BottomMode=BM_TRM;
-		  						else
-		  							BottomMode=BM_FIRST;
-		  						//BottomSounds();
-
-
-		  					} else ++BottomMode;
-
+			    BottomBarChange(true);
 		  		MapWindow::RefreshMap();
 		  		PlayResource(TEXT("IDR_WAV_BTONE2"));
 		  	}
