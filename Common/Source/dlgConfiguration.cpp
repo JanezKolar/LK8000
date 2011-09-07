@@ -2568,6 +2568,7 @@ static void setVariables(void) {
     dfe->addEnumText(TEXT("Navigon"));
     dfe->addEnumText(TEXT("Holux FunTrek GM-130"));
     dfe->addEnumText(TEXT("Medion S3747 / Royaltek BV-3200"));
+    dfe->addEnumText(TEXT("LX MiniMap"));
 	
 	int iTmp;
 	switch (GlobalModelType) {
@@ -2597,6 +2598,9 @@ static void setVariables(void) {
 				break;
 		case MODELTYPE_PNA_ROYALTEK3200:
 				iTmp=(InfoBoxModelAppearance_t)apImPnaRoyaltek3200;
+				break;
+		case MODELTYPE_PNA_MINIMAP:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaMinimap;
 				break;
 		default:
 				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
