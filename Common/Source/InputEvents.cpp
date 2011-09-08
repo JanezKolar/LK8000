@@ -91,7 +91,8 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 // -----------------------------------------------------------------------
 
 bool InitONCE = false;
-int SelectedButtonIndex=3;
+int SelectedButtonIndex=0;
+bool IsMenuShown = false;
 
 // Mapping text names of events to the real thing
 typedef struct {
@@ -514,7 +515,12 @@ void InputEvents::setMode(const TCHAR *mode) {
   if(GlobalModelType==MODELTYPE_PNA_MINIMAP)
   {
   		if(_tcscmp(mode, TEXT("default")) == 0)
-  		SelectedButtonIndex = 1;
+  		{
+  			IsMenuShown=false;
+  			SelectedButtonIndex = 1;
+  		}
+  		else if (_tcscmp(mode, TEXT("Menu")) == 0)
+  			IsMenuShown=true;
 
   }
 
@@ -591,10 +597,13 @@ bool InputEvents::processButton(int bindex) {
 		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 		#endif
 
+
+
 		if (!ButtonLabel::ButtonDisabled[bindex]) {
 			#if 0 // REMOVE ANIMATION
 			ButtonLabel::AnimateButton(bindex);
 			#endif
+
 			processGo(ModeLabel[thismode][i].event);
 		}
 
@@ -2876,23 +2885,33 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 
 	  if (_tcscmp(misc, TEXT("DOWN")) == 0)
 	  {
-		  if(MenuTimeOut < MenuTimeoutMax)
+		  if(IsMenuShown)
 		  {
+			  short retry = 0;
+			  do
+			  {
 			  switch (SelectedButtonIndex)
 			                {
 			                    case 1:
 			                    case 2:
 			                    case 3: SelectedButtonIndex++; break;
 			                    case 4: SelectedButtonIndex = 9; break;
-			                    case 5: SelectedButtonIndex = 1; break;
+			                    case 5: SelectedButtonIndex = 10; break;
 			                    case 6:
 			                    case 7:
 			                    case 8:
 			                    case 9: SelectedButtonIndex--; break;
+			                    case 10:
+			                    case 11:
+			                    case 12: SelectedButtonIndex++; break;
+			                    case 13: SelectedButtonIndex=1; break;
 			                    default:
-			                    	SelectedButtonIndex = 5;
+			                    	SelectedButtonIndex = 1;
 			                        break;
 			                }
+			  retry++;
+			 }while(ButtonLabel::ButtonVisible[SelectedButtonIndex] == false && retry < NUMBUTTONLABELS);
+
 			          int thismode = getModeID();
 					  drawButtons(thismode);
 		  }
@@ -2905,11 +2924,15 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	  }
 	  else if(_tcscmp(misc, TEXT("UP")) == 0)
 	  {
-		  if(MenuTimeOut < MenuTimeoutMax)
+		  if(IsMenuShown)
 		   {
+			 short retry = 0;
+
+			 do
+			 {
 			  switch (SelectedButtonIndex)
 			  {
-			                    case 1: SelectedButtonIndex = 5; break;
+			                    case 1: SelectedButtonIndex = 13; break;
 			                    case 2:
 			                    case 3:
 			                    case 4: SelectedButtonIndex--; break;
@@ -2918,10 +2941,17 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 			                    case 7:
 			                    case 8: SelectedButtonIndex++; break;
 			                    case 9: SelectedButtonIndex = 4; break;
+			                    case 10: SelectedButtonIndex = 5; break;
+			                    case 11:
+			                    case 12:
+			                    case 13: SelectedButtonIndex--; break;
 			                    default:
 			                    	SelectedButtonIndex = 1;
 			                        break;
 			  }
+			  retry++;
+			 }while(ButtonLabel::ButtonVisible[SelectedButtonIndex] == false && retry < NUMBUTTONLABELS);
+
 
 			  int thismode = getModeID();
 			  drawButtons(thismode);
@@ -2968,9 +2998,37 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	   {
 
 
-		  if(MenuTimeOut < MenuTimeoutMax) //menu is shown
-		  	  processButton(SelectedButtonIndex);
-		  else eventZoom(_T("in"));
+     	 if(IsMenuShown)
+     	  {
+		  int thismode = getModeID();
+
+		   int i;
+		   int bindex = SelectedButtonIndex;
+		   // Note - reverse order - last one wins
+		   for (i = ModeLabel_count[thismode]; i >= 0; i--) {
+		 	if ((ModeLabel[thismode][i].location == bindex) ) {
+
+		 		int lastMode = thismode;
+		 		// JMW need a debounce method here..
+
+		 		if (!ButtonLabel::ButtonDisabled[bindex]) {
+
+
+		 			processGo(ModeLabel[thismode][i].event);
+		 		}
+
+		 		// update button text, macro may change the label
+		 		if ((lastMode == getModeID()) && (ModeLabel[thismode][i].label != NULL) && (ButtonLabel::ButtonVisible[bindex])){
+		 			drawButtons(thismode);
+		 		}
+		 		break;
+		 	}
+
+		   }
+     	  }
+		  else
+			  eventZoom(_T("in"));
+
 
 	   }
 
