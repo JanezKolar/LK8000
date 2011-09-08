@@ -34,3 +34,120 @@ event=Mode Nav1
 label= 
 location=1
 
+mode=Nav1
+type=key
+data=L
+event=Mode Nav2
+label=Nav\n1/3 
+location=1
+
+mode=Nav2
+type=key
+data=L
+event=Mode Nav3
+label=Nav\n2/3 
+location=1
+
+mode=Nav3
+type=key
+data=L
+event=Mode Nav1
+label=Nav\n3/3 
+location=1
+
+
+mode=default
+type=key
+data=P
+event=Mode Info1
+label=
+location=2
+
+mode=Info1
+type=key
+data=P
+event=Mode Info2
+label=Info\n1/2 
+location=2
+
+mode=Info2
+type=key
+data=P
+event=Mode Info1
+label=Info\n2/2 
+location=2
+
+
+#
+#Manjka sekcija za event G - > start adwanced oz. next waypoint
+# 
+
+
+
+mode=default
+type=key
+data=SPACE
+event=Zoom out
+
+mode=default
+type=key
+data=K
+event=Zoom in
+
+mode=default
+type=key
+data=J
+event=Zoom out
+
+mode=default
+type=key
+data=D
+event=Mode Menu
+
+mode=default
+type=key
+data=ECSAPE
+event=Mode Menu
+
+mode=default
+type=key
+data=C
+event=Setup Basic
+
+mode=default
+type=key
+data=I
+event=Setup System
+
+mode=default
+type=key
+data=N
+event=Mode default
+event=Setup Task
+
+mode=default
+type=key
+data=O
+event=Mode default
+event=Setup Target
+
+mode=default
+type=key
+data=E
+event=Mode default
+event=Analysis
+
+mode=default
+type=key
+data=H
+event=ResetTask
+
+mode=default
+type=key
+data=F
+event=Mode default
+event=Calculator
+
+
+
+

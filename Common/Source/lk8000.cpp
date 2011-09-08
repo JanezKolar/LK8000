@@ -4175,6 +4175,9 @@ void CommonProcessTimer()
     if(MenuTimeOut==MenuTimeoutMax) {
       if (!MapWindow::mode.AnyPan()) {
 	InputEvents::setMode(TEXT("default"));
+
+
+
       }
     }
     MenuTimeOut++;

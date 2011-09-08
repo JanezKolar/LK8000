@@ -2610,3 +2610,9 @@ label=
 event=Null
 location=11
 
+
+mode=default
+type=key
+data=LEFT
+event=MinimapKey test
+

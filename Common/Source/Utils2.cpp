@@ -403,6 +403,8 @@ main(int argc, char *argv[])
 // however we consider a down as up, and viceversa
 int ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 
+
+
 #define UNGESTURES 1
 #define VKTIMELONG 1500
 #if USEIBOX
@@ -1872,6 +1874,10 @@ void SmartGlobalModelType() {
 					GlobalModelType=MODELTYPE_PNA_ROYALTEK3200;
 			}
 		else
+			if ( !_tcscmp(GlobalModelName,_T("MINIMAP"))) {
+					GlobalModelType=MODELTYPE_PNA_MINIMAP;
+			}
+		else
 			_tcscpy(GlobalModelName,_T("UNKNOWN") );
 	} else	
 		_tcscpy(GlobalModelName, _T("UNKNOWN") );
@@ -1936,6 +1942,9 @@ bool SetModelName(DWORD Temp) {
     return true;
   case MODELTYPE_PNA_ROYALTEK3200:
     _tcscpy(GlobalModelName,_T("ROYALTEK3200"));
+    return true;
+  case MODELTYPE_PNA_MINIMAP:
+    _tcscpy(GlobalModelName,_T("MINIMAP"));
     return true;
   default:
     _tcscpy(GlobalModelName,_T("UNKNOWN"));

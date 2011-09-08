@@ -23,6 +23,7 @@ double StaticPressureToQNEAltitude(double ps);
 double QNHAltitudeToQNEAltitude(double QNAAlt);
 double QNEAltitudeToStaticPressure(double alt);
 double CalculateQNH(double alt_qne, double alt_qnh);
+double QNHAltitudeToStaticPressureEx(double alt);
 
 class DevLXMiniMap : public DevBase
 {

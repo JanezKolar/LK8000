@@ -522,7 +522,7 @@ bool DevLXMiniMap::LXWP3(PDeviceDescriptor_t d, const TCHAR* sentence, NMEA_INFO
   return(true);
 } // LXWP3()
 
-double StaticPressureToQNEAltitude(double ps) {
+double StaticPressureToQNEAltitudeEx(double ps) {
   const double k1=0.190263;
   const double k2=8.417286e-5;
   return (pow(1013.25,k1) - pow(ps/100.0, k1))/k2;
@@ -541,8 +541,15 @@ double QNEAltitudeToStaticPressure(double alt) {
 
 double QNHAltitudeToQNEAltitude(double QNAAlt)
 {
-	double ps = QNHAltitudeToStaticPressure(QNAAlt);
+	double ps = QNHAltitudeToStaticPressureEx(QNAAlt);
 	return StaticPressureToQNEAltitude(ps);
+
+}
+double QNHAltitudeToStaticPressureEx(double alt) {
+  // http://wahiduddin.net/calc/density_altitude.htm
+  const double k1=0.190263;
+  const double k2=8.417286e-5;
+  return 100.0*pow((pow(QNH,k1)-k2*alt),1.0/k1);
 
 }
 double CalculateQNH(double alt_qne, double alt_qnh)
@@ -555,30 +562,5 @@ double CalculateQNH(double alt_qne, double alt_qnh)
 	  double psraw = QNEAltitudeToStaticPressure(alt_qne);
 	  // step 2, calculate QNH so that reported alt will be known alt
 	  return pow(pow(psraw/100.0,k1) + k2*alt_qnh,1/k1);
-}
-
-
-double FindQNH(double alt_raw, double alt_known) {
-  // find QNH so that the static pressure gives the specified altitude
-  // (altitude can come from GPS or known airfield altitude or terrain
-  // height on ground)
-
-  // This function assumes the barometric altitude (alt_raw) is
-  // already adjusted for QNH ---> the function returns the
-  // QNH value to make the barometric altitude equal to the
-  // alt_known value.
-
-  const double k1=0.190263;
-  const double k2=8.417286e-5;
-
-  // step 1, find static pressure from device assuming it's QNH adjusted
-  double psraw = QNHAltitudeToStaticPressure(alt_raw);
-  // step 2, calculate QNH so that reported alt will be known alt
-  return pow(pow(psraw/100.0,k1) + k2*alt_known,1/k1);
-
-  // example, QNH=1014, ps=100203
-  // alt= 100
-  // alt_known = 120
-  // qnh= 1016
 }
 

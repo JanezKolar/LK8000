@@ -12,6 +12,7 @@
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"
+#include "InputEvents.h"
 
 #if USEIBOX
 #include "InfoBox.h"
@@ -850,10 +851,17 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
     bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
 
     if (greyed) {
-      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 5);
+      if(InputEvents::getSelectedButtonIndex() == index)
+    	  SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 7);
+      else
+    	  SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 5);
       ButtonDisabled[index]= true;
     } else {
-      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 4);
+    	 if(InputEvents::getSelectedButtonIndex() == index)
+    	    SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 6);
+    	 else
+    	    SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 4);
+
       ButtonDisabled[index]= false;
     }
 

@@ -91,7 +91,7 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 // -----------------------------------------------------------------------
 
 bool InitONCE = false;
-int SelectedButtonIndex=0;
+int SelectedButtonIndex=3;
 
 // Mapping text names of events to the real thing
 typedef struct {
@@ -511,6 +511,13 @@ void InputEvents::setMode(const TCHAR *mode) {
 
   ASSERT(mode != NULL);
 
+  if(GlobalModelType==MODELTYPE_PNA_MINIMAP)
+  {
+  		if(_tcscmp(mode, TEXT("default")) == 0)
+  		SelectedButtonIndex = 1;
+
+  }
+
   _tcsncpy(mode_current, mode, MAX_MODE_STRING);
   mode_current[MAX_MODE_STRING-1]='\0'; // BUGFIX 100331 AND 110202
 
@@ -613,6 +620,22 @@ bool InputEvents::processButton(int bindex) {
 */
 bool InputEvents::processKey(int dWord) {
   if (!(ProgramStarted==psNormalOp)) return false;
+
+ /* if(GlobalModelType==MODELTYPE_PNA_MINIMAP)
+  {
+  		if(dWord == 0x26)
+  		{
+  			eventZoom(_T("Out"));
+  			return true;
+  		}
+  		else if (dWord == 0x28)
+  		{
+  			eventZoom(_T("In"));
+  			return true;
+  		}
+
+  }*/
+
 
   InterfaceTimeoutReset();
 
@@ -2849,9 +2872,11 @@ int InputEvents::getSelectedButtonIndex()
 
 void InputEvents::eventMinimapKey(const TCHAR *misc)
 {
+
+
 	  if (_tcscmp(misc, TEXT("DOWN")) == 0)
 	  {
-		  if(MenuTimeOut == 0)
+		  if(MenuTimeOut < MenuTimeoutMax)
 		  {
 			  switch (SelectedButtonIndex)
 			                {
@@ -2868,7 +2893,8 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 			                    	SelectedButtonIndex = 5;
 			                        break;
 			                }
-
+			          int thismode = getModeID();
+					  drawButtons(thismode);
 		  }
 		  else
 		  {
@@ -2879,7 +2905,7 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	  }
 	  else if(_tcscmp(misc, TEXT("UP")) == 0)
 	  {
-		  if(MenuTimeOut == 0)
+		  if(MenuTimeOut < MenuTimeoutMax)
 		   {
 			  switch (SelectedButtonIndex)
 			  {
@@ -2897,6 +2923,8 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 			                        break;
 			  }
 
+			  int thismode = getModeID();
+			  drawButtons(thismode);
 		   }
 		   else
 		  {
@@ -2938,8 +2966,11 @@ void InputEvents::eventMinimapKey(const TCHAR *misc)
 	   }
 	  else if(_tcscmp(misc, TEXT("RETURN")) == 0)
 	   {
-		  if(MenuTimeOut == 0) //menu is shown
+
+
+		  if(MenuTimeOut < MenuTimeoutMax) //menu is shown
 		  	  processButton(SelectedButtonIndex);
+		  else eventZoom(_T("in"));
 
 	   }
 

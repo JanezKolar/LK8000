@@ -4710,6 +4710,9 @@ void dlgConfigurationShowModal(void){
       case apImPnaRoyaltek3200:
 	GlobalModelType = MODELTYPE_PNA_ROYALTEK3200;
 	break;
+      case apImPnaMinimap:
+	GlobalModelType = MODELTYPE_PNA_MINIMAP;
+	break;
       default:
 	GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
 	break;
